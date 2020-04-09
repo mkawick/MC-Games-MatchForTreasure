@@ -10,6 +10,8 @@ public class GameAnimator : MonoBehaviour
     GameObject[] boxes;
     [SerializeField]
     GameObject successAnimPrefab;
+    [SerializeField]
+    GameObject failureAnimPrefab;
     List<int> clickedIndices;
     List<GameObject> choicesMade;
 
@@ -61,6 +63,17 @@ public class GameAnimator : MonoBehaviour
     public void PlaySuccessAnimation()
     {
         if(successAnimPrefab != null)
+        {
+            Vector3 position = Vector3.zero;
+            Quaternion rot = Quaternion.identity;
+            GameObject go = Instantiate(successAnimPrefab, position, rot);
+            Destroy(go, 2.5f);
+        }
+    }
+
+    public void PlayFailureAnimation()
+    {
+        if (successAnimPrefab != null)
         {
             Vector3 position = Vector3.zero;
             Quaternion rot = Quaternion.identity;
