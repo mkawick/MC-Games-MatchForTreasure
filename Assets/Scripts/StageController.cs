@@ -53,31 +53,37 @@ public class StageController : MonoBehaviour
                         {
                             matchStage = MatchStages.Hidden;
                             timeStamp = subTimeStamp = Time.time;
-                            for (int i = 0; i < choiceInstances.Length; i++)
-                            {
-                                choiceInstances[i].active = false;
-                            }
+                            ShowTheChoicesAboveTheBoxes(false);
+                            // should be a transition state
+                            ga.EnableAllClickables();
                         }
                         else 
                         {
                             int subTime = (int)((Time.time - subTimeStamp) * 10.0f);
                             bool isOn = (subTime % 2 != 0) ? true:false;
-                            //Debug.Log("isOn = " + isOn);
-                            Debug.Log("subTime = " + subTime);
-                            for (int i = 0; i < choiceInstances.Length; i++)
-                            {
-                                choiceInstances[i].active = isOn;
-                            }
+                            ShowTheChoicesAboveTheBoxes(isOn);
                         }
                     }
                     break;
                 case MatchStages.Hidden:
                     {
-                        ga.EnableAllClickables();
+                        if(ga.GetChoices().Count == 3)
+                        {
+                            matchStage = MatchStages.FinishAndCompare;
+                            ga.PlaySuccessAnimation();
+                        }
                     }
                     break;
             }
             //timeStamp
+        }
+    }
+
+    void ShowTheChoicesAboveTheBoxes(bool show = true)
+    {
+        for (int i = 0; i < choiceInstances.Length; i++)
+        {
+            choiceInstances[i].active = show;
         }
     }
 

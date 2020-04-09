@@ -7,6 +7,8 @@ public class ClickableChoice : MonoBehaviour
     public GameAnimator gameAnimator;
     bool isMouseButtonDown = false;
     public bool isClickingEnabled { get; set;  }
+
+    public int choiceIndex { get; set; }
     // Start is called before the first frame update
     void Start()
     {
