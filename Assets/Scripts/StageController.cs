@@ -16,7 +16,8 @@ public class StageController : MonoBehaviour
         Begin,
         FlashingMode, 
         Hidden,
-        FinishAndCompare
+        FinishAndCompare,
+        NavigateToNextScene
     }
 
     MatchStages matchStage;
@@ -69,22 +70,28 @@ public class StageController : MonoBehaviour
                     {
                         if(ga.GetChoices().Count == 3)
                         {
+                            timeStamp = Time.time;
                             matchStage = MatchStages.FinishAndCompare;
-                            
+                            ga.EnableAllClickables(false);
                         }
                     }
                     break;
                 case MatchStages.FinishAndCompare:
                     {
-                        ga.EnableAllClickables(false);
-                        if (DoChoicesMatch() == true)
+                        if (Time.time - timeStamp > ga.timeToWaitForFruitAnim/2)
                         {
-                            ga.PlaySuccessAnimation();
-                        }
-                        else
-                        {
-                            ga.PlayFailureAnimation();
-                            CleanupAndReset();
+                            //ga.EnableAllClickables(false);
+                            if (DoChoicesMatch() == true)
+                            {
+                                ga.PlaySuccessAnimation();
+                                matchStage = MatchStages.NavigateToNextScene;
+                            }
+                            else
+                            {
+                                ga.PlayFailureAnimation();
+                                CleanupAndReset();
+                                matchStage = MatchStages.Begin;
+                            }
                         }
                     }
                     break;

@@ -18,9 +18,9 @@ public class GameAnimator : MonoBehaviour
     int currentDestinationIndex = 0;
     void Start()
     {
-        foreach(var go in clickables)
+        int index = 0;
+        foreach (var go in clickables)
         {
-            int index = 0;
             var comp = go.GetComponent<ClickableChoice>();
             if (comp)
             {
@@ -33,17 +33,17 @@ public class GameAnimator : MonoBehaviour
         choicesMade = new List<GameObject>();
     }
 
-    public void EnableAllClickables(bool enable = true)
+    public void EnableAllClickables(bool turnOn = true)
     {
         foreach (var go in clickables)
         {
             var comp = go.GetComponent<ClickableChoice>();
             if (comp)
             {
-                comp.isClickingEnabled = enable;
+                comp.isClickingEnabled = turnOn;
             }
         }
-        if (enabled == true)
+        if (turnOn == true)
         {
             clickedIndices = new List<int>();
             choicesMade = new List<GameObject>();
@@ -77,11 +77,12 @@ public class GameAnimator : MonoBehaviour
         {
             Vector3 position = Vector3.zero;
             Quaternion rot = Quaternion.identity;
-            GameObject go = Instantiate(successAnimPrefab, position, rot);
+            GameObject go = Instantiate(failureAnimPrefab, position, rot);
             Destroy(go, 2.5f);
         }
     }
 
+    public float timeToWaitForFruitAnim { get { return 3.0f; } }
     public void ChoiceMade(GameObject go)
     {
         if (currentDestinationIndex >= boxes.Length)
@@ -99,7 +100,7 @@ public class GameAnimator : MonoBehaviour
         GameObject newObj = Instantiate(go, position, rot);
         if (newObj != null)
         {
-            iTween.MoveTo(newObj, destination, 3.0f);
+            iTween.MoveTo(newObj, destination, timeToWaitForFruitAnim);
             choicesMade.Add(newObj);
             clickedIndices.Add(go.GetComponent<ClickableChoice>().choiceIndex);
             /*    iTween tween;// = new iTween();
