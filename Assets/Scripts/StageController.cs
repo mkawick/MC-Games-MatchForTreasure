@@ -22,12 +22,12 @@ public class StageController : MonoBehaviour
 
     MatchStages matchStage;
 
-    GameAnimator ga;
+    GameAnimator animator;
     // Start is called before the first frame update
     void Start()
     {
-        ga = this.GetComponent<GameAnimator>();
-        ga.EnableAllClickables(false);
+        animator = this.GetComponent<GameAnimator>();
+        animator.EnableAllClickables(false);
         Screen.SetResolution(600, 800, false);
     }
 
@@ -56,7 +56,7 @@ public class StageController : MonoBehaviour
                             timeStamp = subTimeStamp = Time.time;
                             ShowTheChoicesAboveTheBoxes(false);
                             // should be a transition state
-                            ga.EnableAllClickables();
+                            animator.EnableAllClickables();
                         }
                         else 
                         {
@@ -68,29 +68,30 @@ public class StageController : MonoBehaviour
                     break;
                 case MatchStages.Hidden:
                     {
-                        if(ga.GetChoices().Count == 3)
+                        if(animator.GetChoices().Count == 3)
                         {
                             timeStamp = Time.time;
                             matchStage = MatchStages.FinishAndCompare;
-                            ga.EnableAllClickables(false);
+                            animator.EnableAllClickables(false);
                         }
                     }
                     break;
                 case MatchStages.FinishAndCompare:
                     {
-                        if (Time.time - timeStamp > ga.timeToWaitForFruitAnim/2)
+                        if (Time.time - timeStamp > animator.timeToWaitForFruitAnim/2)
                         {
                             //ga.EnableAllClickables(false);
                             if (DoChoicesMatch() == true)
                             {
-                                ga.PlaySuccessAnimation();
+                                animator.PlaySuccessAnimation();
                                 matchStage = MatchStages.NavigateToNextScene;
                             }
                             else
                             {
-                                ga.PlayFailureAnimation();
+                                animator.PlayFailureAnimation();
                                 CleanupAndReset();
                                 matchStage = MatchStages.Begin;
+                                timeStamp = subTimeStamp = Time.time;
                             }
                         }
                     }
@@ -102,7 +103,7 @@ public class StageController : MonoBehaviour
 
     bool DoChoicesMatch()
     {
-        var choices = ga.GetChoices();
+        var choices = animator.GetChoices();
         var matchCases = matchOptions;
         if (matchOptions.Length != choices.Count)
             return false;
@@ -118,21 +119,33 @@ public class StageController : MonoBehaviour
 
     void CleanupAndReset()
     {
-        Vector3[] destinations;
-        ga.GetDestinations(out destinations);
-        GameObject[] clickableObjects;
-        ga.GetClickables(out clickableObjects);
-
-        for (int i = 0; i < destinations.Length; i++)
+      /*  for(int i=0; i< choiceInstances.Length; i++)
         {
-            int option = matchOptions[i] ;
-            Vector3 pos = destinations[i];
-            pos.y += 1;
-            GameObject archetype = clickableObjects[matchOptions[i]];
-            choiceInstances[i] = Instantiate(archetype, pos, archetype.transform.rotation);
-            //choiceInstances[i].transform.position = pos;
-            //choiceInstances[i].transform.rotation = 
-        }
+            Destroy(choiceInstances[i], 0.5f);
+        }*/
+        
+
+        Vector3[] destinations;
+        animator.GetDestinations(out destinations);
+        GameObject[] clickableObjects;
+        animator.GetClickables(out clickableObjects);
+
+        animator.ClearPreviousSelections();
+        timeStamp = Time.time;
+        matchStage = MatchStages.Begin;
+        /*  choiceInstances = new GameObject[destinations.Length];
+          matchOptions = new int[destinations.Length];*/
+
+        /*   for (int i = 0; i < destinations.Length; i++)
+           {
+               int option = matchOptions[i] ;
+               Vector3 pos = destinations[i];
+               pos.y += 1;
+               GameObject archetype = clickableObjects[matchOptions[i]];
+               choiceInstances[i] = Instantiate(archetype, pos, archetype.transform.rotation);
+               //choiceInstances[i].transform.position = pos;
+               //choiceInstances[i].transform.rotation = 
+           }*/
     }
 
     void ShowTheChoicesAboveTheBoxes(bool show = true)
@@ -150,10 +163,10 @@ public class StageController : MonoBehaviour
 
         isRunning = true;
         Vector3[] destinations;
-        ga.GetDestinations(out destinations);
+        animator.GetDestinations(out destinations);
 
         GameObject[] clickableObjects;
-        ga.GetClickables(out clickableObjects);
+        animator.GetClickables(out clickableObjects);
 
         choiceInstances = new GameObject[destinations.Length];
         matchOptions = new int[destinations.Length];

@@ -65,6 +65,7 @@ public class GameAnimator : MonoBehaviour
         if(successAnimPrefab != null)
         {
             Vector3 position = Vector3.zero;
+            //position.x = 20;
             Quaternion rot = Quaternion.identity;
             GameObject go = Instantiate(successAnimPrefab, position, rot);
             Destroy(go, 2.5f);
@@ -76,6 +77,7 @@ public class GameAnimator : MonoBehaviour
         if (successAnimPrefab != null)
         {
             Vector3 position = Vector3.zero;
+            //position.x = 80;
             Quaternion rot = Quaternion.identity;
             GameObject go = Instantiate(failureAnimPrefab, position, rot);
             Destroy(go, 2.5f);
@@ -106,6 +108,16 @@ public class GameAnimator : MonoBehaviour
             /*    iTween tween;// = new iTween();
                 tween.easeType = iTween.EaseType.easeInCubic;*/
         }
+    }
+
+    public void ClearPreviousSelections()
+    {
+        foreach (var go in choicesMade)
+        {
+            Destroy(go, 0.5f);
+        }
+        clickedIndices.Clear();
+        currentDestinationIndex = 0;
     }
 
     public void GetDestinations(out Vector3 [] positions)
