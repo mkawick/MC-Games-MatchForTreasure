@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StageController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class StageController : MonoBehaviour
     GameObject[] choiceInstances;
     float timeStamp = 0;
     float subTimeStamp = 0;
+    public GameObject startButton;
 
     enum MatchStages
     {
@@ -160,6 +162,12 @@ public class StageController : MonoBehaviour
     {
         if (isRunning == true)
             return;
+
+        if (startButton != null)
+        {
+            //startButton.GetComponent<GameObject>().SetActive(false);
+            startButton.SetActive(false);
+        }
 
         isRunning = true;
         Vector3[] destinations;

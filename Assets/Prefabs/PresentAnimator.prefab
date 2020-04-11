@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2961578583621319237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2961578583621319243}
+  - component: {fileID: 2961578583621319242}
+  m_Layer: 0
+  m_Name: PresentAnimator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2961578583621319243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2961578583621319237}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.289197, y: 0.5067163, z: -0.289317}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2961578583621319242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2961578583621319237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 521fe0137969ec74b9b751cd96993ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  box: {fileID: 0}
+  lid: {fileID: 0}
+  wrappedRibbon: {fileID: 0}
+  unwrappedRibbon: {fileID: 0}
+  successAnimPrefab: {fileID: 4854333485820317604, guid: 15907e34b2ec6e74b9b8e3a8fcac5770,
+    type: 3}
+  pauseTimeBeforeUnwrap: 1
+  pauseTimeBeforeLidOpen: 1
+  pauseTimeBeforeConfetti: 1
+  howLongToPlayUnwrap: 1
+  howLongToPlayLidOpen: 1
+  howLongToPlayConfetti: 2.5

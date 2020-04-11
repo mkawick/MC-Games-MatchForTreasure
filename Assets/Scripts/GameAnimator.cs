@@ -12,6 +12,8 @@ public class GameAnimator : MonoBehaviour
     GameObject successAnimPrefab;
     [SerializeField]
     GameObject failureAnimPrefab;
+    [SerializeField]
+    GameObject presentAnimation; 
     List<int> clickedIndices;
     List<GameObject> choicesMade;
 
@@ -64,11 +66,13 @@ public class GameAnimator : MonoBehaviour
     {
         if(successAnimPrefab != null)
         {
-            Vector3 position = Vector3.zero;
-            //position.x = 20;
-            Quaternion rot = Quaternion.identity;
-            GameObject go = Instantiate(successAnimPrefab, position, rot);
-            Destroy(go, 2.5f);
+            /* Vector3 position = Vector3.zero;
+             //position.x = 20;
+             Quaternion rot = Quaternion.identity;
+             GameObject go = Instantiate(successAnimPrefab, position, rot);
+             Destroy(go, 2.5f);*/
+            presentAnimation.SetActive(true);
+            presentAnimation.GetComponent<BoxAnim>().Begin();
         }
     }
 
