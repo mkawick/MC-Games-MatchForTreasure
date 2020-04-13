@@ -6,15 +6,17 @@ public class BoxAnim : MonoBehaviour
 {
     [SerializeField]
     GameObject parentPrefabInstance;
+   /* [SerializeField]
+    GameObject box;*/
     [SerializeField]
-    GameObject box;
-    [SerializeField]
-    GameObject lid, wrappedRibbon, unwrappedRibbon;
+    GameObject boxPrefab, lidPrefab, wrappedRibbonPrefab, unwrappedRibbonPrefab;
+    GameObject box, lid, wrappedRibbon, unwrappedRibbon, parentInstance;
     [SerializeField]
     GameObject successAnimPrefab;
     public Transform particleEffectSpot;
     [SerializeField]
     GameObject [] toyRewards;
+    GameObject animatedToyReward;
     public Transform toyStartSpot;
     public Transform toyEndSpot;
     public bool enableKeypressForTest = false;
@@ -51,6 +53,11 @@ public class BoxAnim : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        CopyAllPrefabs();
+
+        if (parentPrefabInstance != null)
+            parentPrefabInstance.SetActive(false);
+
         if (unwrappedRibbon != null)
             unwrappedRibbon.SetActive(false);
 
@@ -61,6 +68,48 @@ public class BoxAnim : MonoBehaviour
         if (box != null)
             box.SetActive(true);
         timeStamp = Time.time;
+    }
+
+    void CopyAllPrefabs()
+    {
+        parentInstance = Instantiate(parentPrefabInstance);
+        parentInstance.transform.parent = this.transform;
+        parentInstance.transform.position = parentPrefabInstance.transform.position;
+
+        box = GetChildObject(parentInstance.transform, "PresentBox");
+        lid = GetChildObject(parentInstance.transform, "PresentCap");
+        wrappedRibbon = GetChildObject(parentInstance.transform, "PresentWrappedBand");
+        unwrappedRibbon = GetChildObject(parentInstance.transform, "PresentUnwrappedBand");
+
+        /* parentInstance.GetComponentInChildren
+
+         box = Instantiate(boxPrefab);s
+         lid = Instantiate(lidPrefab);
+         wrappedRibbon = Instantiate(wrappedRibbonPrefab);
+         unwrappedRibbon = Instantiate(unwrappedRibbonPrefab);*/
+
+    }
+    public GameObject GetChildObject(Transform parent, string _tag)
+    {
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+            if (child.tag == _tag)
+            {
+                return child.gameObject;
+            }
+            if (child.childCount > 0)
+            {
+                return GetChildObject(child, _tag);
+            }
+        }
+        return null;
+    }
+
+    private void Reset()
+    {
+        if (animatedToyReward != null)
+            Destroy(animatedToyReward);
     }
 
     // Update is called once per frame
@@ -145,15 +194,19 @@ public class BoxAnim : MonoBehaviour
                     if(toyRewards!= null)
                     {
                         GameObject archetype;
+                        int which;
                         do
                         {
-                            int which = (int)(UnityEngine.Random.value * (float)toyRewards.Length);
+                            which = (int)(UnityEngine.Random.value * (float)toyRewards.Length);
                             archetype = toyRewards[which];
                         } while (archetype == null);
 
-                        archetype.SetActive(true);
-                        archetype.transform.position = toyStartSpot.position;
-                        iTween.MoveTo(archetype,  toyEndSpot.position, howLongToPlayLidOpen);
+                        animatedToyReward = Instantiate(archetype);
+                        animatedToyReward.SetActive(true);
+                        animatedToyReward.transform.rotation = toyRewards[which].transform.rotation;
+                        animatedToyReward.transform.position = toyStartSpot.position;
+                        animatedToyReward.transform.parent = this.transform;
+                        iTween.MoveTo(animatedToyReward, toyEndSpot.position, howLongToPlayLidOpen);
                         animStage = Stages.Finished;
                         timeStamp = Time.time;
                     }
@@ -183,8 +236,8 @@ public class BoxAnim : MonoBehaviour
                 randomDuration = UnityEngine.Random.value * 1.5f + 1;
                 float shakeRotAmount = UnityEngine.Random.value * 8;
                 float shakePosAmount = UnityEngine.Random.value / 10;
-                iTween.ShakeRotation(parentPrefabInstance, new Vector3(0, 0, shakeRotAmount), randomDuration);
-                iTween.ShakePosition(parentPrefabInstance, new Vector3(shakePosAmount, shakePosAmount, 0), randomDuration);
+                iTween.ShakeRotation(parentInstance, new Vector3(0, 0, shakeRotAmount), randomDuration);
+                iTween.ShakePosition(parentInstance, new Vector3(shakePosAmount, shakePosAmount, 0), randomDuration);
             }
         }
         else
@@ -206,14 +259,17 @@ public class BoxAnim : MonoBehaviour
         timeStamp = Time.time;
         animStage = Stages.PauseBeforeUnwrap;
 
-        if (parentPrefabInstance != null)
-            parentPrefabInstance.SetActive(true);
+        if (parentInstance != null)
+            parentInstance.SetActive(true);
         if (wrappedRibbon != null)
             wrappedRibbon.SetActive(true);
         if (lid != null)
             lid.SetActive(true);
         if (box != null)
             box.SetActive(true);
+
+        if (unwrappedRibbon != null)
+            unwrappedRibbon.SetActive(false);
     }
 
 }
