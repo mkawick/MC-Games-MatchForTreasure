@@ -183,7 +183,7 @@ public class StageController : MonoBehaviour
         {
             matchOptions[i] = (int)(Random.value * (float) clickableObjects.Length);
             Vector3 pos = destinations[i];
-            pos.y += 1;
+            pos.y -= 1.2f;
             GameObject archetype = clickableObjects[matchOptions[i]];
             choiceInstances[i] = Instantiate(archetype, pos, archetype.transform.rotation);
             var collider = choiceInstances[i].GetComponent<CapsuleCollider>();

@@ -13,9 +13,15 @@ public class GameAnimator : MonoBehaviour
     [SerializeField]
     GameObject failureAnimPrefab;
     [SerializeField]
-    GameObject presentAnimation; 
+    GameObject presentAnimation;
+    [SerializeField]
+    GameObject toyReward;
+
     List<int> clickedIndices;
     List<GameObject> choicesMade;
+    public Transform particleEffectSpot;
+
+    public float hoverPositionsAboveBoxes = 0.6f;
 
     int currentDestinationIndex = 0;
     void Start()
@@ -71,6 +77,7 @@ public class GameAnimator : MonoBehaviour
              Quaternion rot = Quaternion.identity;
              GameObject go = Instantiate(successAnimPrefab, position, rot);
              Destroy(go, 2.5f);*/
+            presentAnimation.GetComponent<BoxAnim>().particleEffectSpot = particleEffectSpot.transform;
             presentAnimation.SetActive(true);
             presentAnimation.GetComponent<BoxAnim>().Begin();
         }
@@ -80,7 +87,7 @@ public class GameAnimator : MonoBehaviour
     {
         if (successAnimPrefab != null)
         {
-            Vector3 position = Vector3.zero;
+            Vector3 position = particleEffectSpot.transform.position;// Vector3.zero;
             //position.x = 80;
             Quaternion rot = Quaternion.identity;
             GameObject go = Instantiate(failureAnimPrefab, position, rot);
@@ -99,7 +106,7 @@ public class GameAnimator : MonoBehaviour
         int which = currentDestinationIndex++;
 
         Vector3 destination = boxes[which].transform.position;
-        destination.y += 1;
+        destination.y += hoverPositionsAboveBoxes;
         Vector3 position = go.transform.position;
         Quaternion rot = go.transform.rotation;
 

@@ -12,6 +12,11 @@ public class BoxAnim : MonoBehaviour
     GameObject lid, wrappedRibbon, unwrappedRibbon;
     [SerializeField]
     GameObject successAnimPrefab;
+    public Transform particleEffectSpot;
+    [SerializeField]
+    GameObject toyReward;
+    public Transform toyStartSpot;
+    public Transform toyEndSpot;
 
     float timeStamp;
     public float pauseTimeBeforeUnwrap = 1.0f;
@@ -31,6 +36,7 @@ public class BoxAnim : MonoBehaviour
         LidOpening, 
         PauseBeforeConfetti,
         PlayingConfetti,
+        ShowAndAnimateToy,
         Finished
     }
     // Start is called before the first frame update
@@ -110,14 +116,25 @@ public class BoxAnim : MonoBehaviour
             case Stages.PlayingConfetti:
                 {
                     Quaternion rot = Quaternion.identity;
-                    Vector3 position = (lid.transform.position + box.transform.position) ; // Vector3.zero;
-                    position *= 0.8f;
-                    position += box.transform.position;
-                    position.x -= 1.0f;
+                    /*  Vector3 position = (lid.transform.position + box.transform.position) ; // Vector3.zero;
+                      position *= 0.8f;
+                      position += box.transform.position;*/
+                    Vector3 position = particleEffectSpot.transform.position;//
+                    //position.x -= 1.0f;
                     GameObject go = Instantiate(successAnimPrefab, position, rot);
                     go.transform.localScale *= 0.4f;
                     Destroy(go, howLongToPlayConfetti);
-                    animStage = Stages.Finished;
+                    animStage = Stages.ShowAndAnimateToy;
+                }
+                break;
+            case Stages.ShowAndAnimateToy:
+                {
+                    if(toyReward!= null)
+                    {
+                        toyReward.SetActive(true);
+                        toyReward.transform.position = toyStartSpot.position;
+                        iTween.MoveTo(toyReward,  toyEndSpot.position, howLongToPlayLidOpen);
+}
                 }
                 break;
             case Stages.Finished:
