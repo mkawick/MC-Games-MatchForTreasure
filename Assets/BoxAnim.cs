@@ -14,7 +14,7 @@ public class BoxAnim : MonoBehaviour
     GameObject successAnimPrefab;
     public Transform particleEffectSpot;
     [SerializeField]
-    GameObject toyReward;
+    GameObject [] toyRewards;
     public Transform toyStartSpot;
     public Transform toyEndSpot;
 
@@ -129,12 +129,21 @@ public class BoxAnim : MonoBehaviour
                 break;
             case Stages.ShowAndAnimateToy:
                 {
-                    if(toyReward!= null)
+                    if(toyRewards!= null)
                     {
-                        toyReward.SetActive(true);
-                        toyReward.transform.position = toyStartSpot.position;
-                        iTween.MoveTo(toyReward,  toyEndSpot.position, howLongToPlayLidOpen);
-}
+                        GameObject archetype;
+                        do
+                        {
+                            int which = (int)(Random.value * (float)toyRewards.Length);
+                            archetype = toyRewards[which];
+                        } while (archetype == null);
+
+                        archetype.SetActive(true);
+                        archetype.transform.position = toyStartSpot.position;
+                        iTween.MoveTo(archetype,  toyEndSpot.position, howLongToPlayLidOpen);
+                        animStage = Stages.Finished;
+                        timeStamp = Time.time;
+                    }
                 }
                 break;
             case Stages.Finished:
