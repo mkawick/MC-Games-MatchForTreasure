@@ -1378,6 +1378,11 @@ PrefabInstance:
       propertyPath: toyRewards.Array.data[2]
       value: 
       objectReference: {fileID: 1618864972}
+    - target: {fileID: 2961578583621319242, guid: 58df8669fea76af48b7857c56b4e9bb5,
+        type: 3}
+      propertyPath: howLongToPlayLidOpen
+      value: 1.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58df8669fea76af48b7857c56b4e9bb5, type: 3}
 --- !u!1 &1033357528 stripped

@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BoxAnim : MonoBehaviour
 {
@@ -17,8 +17,10 @@ public class BoxAnim : MonoBehaviour
     GameObject [] toyRewards;
     public Transform toyStartSpot;
     public Transform toyEndSpot;
+    public bool enableKeypressForTest = false;
 
     float timeStamp;
+    float randomDuration;
     public float pauseTimeBeforeUnwrap = 1.0f;
     public float pauseTimeBeforeLidOpen = 1.0f;
     public float pauseTimeBeforeConfetti = 1.0f;
@@ -26,6 +28,7 @@ public class BoxAnim : MonoBehaviour
     public float howLongToPlayLidOpen = 1.0f;
     public float howLongToPlayConfetti = 1.0f;
     Stages animStage = Stages.Waiting;
+    ShakingState shakingStage = ShakingState.NotShaking;
 
     enum Stages
     {
@@ -39,6 +42,12 @@ public class BoxAnim : MonoBehaviour
         ShowAndAnimateToy,
         Finished
     }
+    enum ShakingState
+    {
+        NotShaking,
+        SettingUpShake,
+        Skaking
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -51,17 +60,21 @@ public class BoxAnim : MonoBehaviour
             lid.SetActive(true);
         if (box != null)
             box.SetActive(true);
+        timeStamp = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-      /*  if( Input.GetKeyDown(KeyCode.Return) == true)
+        if(enableKeypressForTest == true && Input.GetKeyDown(KeyCode.Return) == true)
         {
             Begin();
-        }*/
+        }
         if (animStage == Stages.Waiting)
+        {
+            HandleShakingAnim();
             return;
+        }
         switch(animStage)
         {
             case Stages.PauseBeforeUnwrap:
@@ -134,7 +147,7 @@ public class BoxAnim : MonoBehaviour
                         GameObject archetype;
                         do
                         {
-                            int which = (int)(Random.value * (float)toyRewards.Length);
+                            int which = (int)(UnityEngine.Random.value * (float)toyRewards.Length);
                             archetype = toyRewards[which];
                         } while (archetype == null);
 
@@ -152,10 +165,41 @@ public class BoxAnim : MonoBehaviour
         }
     }
 
-   /* private void Reset()
+    private void HandleShakingAnim()
     {
-        
-    }*/
+        if (shakingStage == ShakingState.NotShaking)
+        {
+            timeStamp = Time.time;
+            shakingStage = ShakingState.SettingUpShake;
+            randomDuration = UnityEngine.Random.value * 3 + 2;
+        }
+        else if (shakingStage == ShakingState.SettingUpShake)
+        {
+            // essentially do nothing until time passes
+            if (Time.time - timeStamp > randomDuration)
+            {
+                timeStamp = Time.time;
+                shakingStage = ShakingState.Skaking;
+                randomDuration = UnityEngine.Random.value * 1.5f + 1;
+                float shakeRotAmount = UnityEngine.Random.value * 8;
+                float shakePosAmount = UnityEngine.Random.value / 10;
+                iTween.ShakeRotation(parentPrefabInstance, new Vector3(0, 0, shakeRotAmount), randomDuration);
+                iTween.ShakePosition(parentPrefabInstance, new Vector3(shakePosAmount, shakePosAmount, 0), randomDuration);
+            }
+        }
+        else
+        {
+            if (Time.time - timeStamp > randomDuration)
+            {
+                shakingStage = ShakingState.NotShaking;
+            }
+        }
+    }
+
+    /* private void Reset()
+     {
+
+     }*/
 
     public void Begin()
     {

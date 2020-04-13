@@ -396,6 +396,12 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &2077773381 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000010238139128, guid: cf8c19b412f3d3a47814f36bc49e0477,
+    type: 3}
+  m_PrefabInstance: {fileID: 313426295}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2961578582107585346
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -483,5 +489,15 @@ PrefabInstance:
       propertyPath: unwrappedRibbon
       value: 
       objectReference: {fileID: 313426296}
+    - target: {fileID: 2961578583621319242, guid: 58df8669fea76af48b7857c56b4e9bb5,
+        type: 3}
+      propertyPath: parentPrefabInstance
+      value: 
+      objectReference: {fileID: 2077773381}
+    - target: {fileID: 2961578583621319242, guid: 58df8669fea76af48b7857c56b4e9bb5,
+        type: 3}
+      propertyPath: enableKeypressForTest
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58df8669fea76af48b7857c56b4e9bb5, type: 3}
