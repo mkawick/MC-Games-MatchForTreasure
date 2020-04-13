@@ -13,6 +13,8 @@ public class StageController : MonoBehaviour
     float subTimeStamp = 0;
     public GameObject startButton;
 
+    public float offsetVerticalFromBoxToPlaceChoices = 1.2f;
+
     enum MatchStages
     {
         Begin,
@@ -170,6 +172,14 @@ public class StageController : MonoBehaviour
         }
 
         isRunning = true;
+        ChooseRandomObjectsForPlacement();
+
+        timeStamp = Time.time;
+        matchStage = MatchStages.Begin;
+    }
+
+    void ChooseRandomObjectsForPlacement()
+    {
         Vector3[] destinations;
         animator.GetDestinations(out destinations);
 
@@ -179,7 +189,7 @@ public class StageController : MonoBehaviour
         choiceInstances = new GameObject[destinations.Length];
         matchOptions = new int[destinations.Length];
 
-        for (int i=0; i<destinations.Length; i++)
+        for (int i = 0; i < destinations.Length; i++)
         {
             GameObject archetype;
             do
@@ -189,14 +199,10 @@ public class StageController : MonoBehaviour
             } while (archetype != null && archetype.activeSelf == false);
 
             Vector3 pos = destinations[i];
-            pos.y -= 1.2f;
-            //GameObject archetype = clickableObjects[matchOptions[i]];
+            pos.y -= offsetVerticalFromBoxToPlaceChoices;// just an offset
             choiceInstances[i] = Instantiate(archetype, pos, archetype.transform.rotation);
             var collider = choiceInstances[i].GetComponent<CapsuleCollider>();
             Destroy(collider);// make it not clickable
         }
-
-        timeStamp = Time.time;
-        matchStage = MatchStages.Begin;
     }
 }
