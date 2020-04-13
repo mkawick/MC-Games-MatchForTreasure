@@ -181,10 +181,16 @@ public class StageController : MonoBehaviour
 
         for (int i=0; i<destinations.Length; i++)
         {
-            matchOptions[i] = (int)(Random.value * (float) clickableObjects.Length);
+            GameObject archetype;
+            do
+            {
+                matchOptions[i] = (int)(Random.value * (float)clickableObjects.Length);
+                archetype = clickableObjects[matchOptions[i]];
+            } while (archetype != null && archetype.activeSelf == false);
+
             Vector3 pos = destinations[i];
             pos.y -= 1.2f;
-            GameObject archetype = clickableObjects[matchOptions[i]];
+            //GameObject archetype = clickableObjects[matchOptions[i]];
             choiceInstances[i] = Instantiate(archetype, pos, archetype.transform.rotation);
             var collider = choiceInstances[i].GetComponent<CapsuleCollider>();
             Destroy(collider);// make it not clickable
