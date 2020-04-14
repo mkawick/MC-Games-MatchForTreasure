@@ -12,6 +12,7 @@ public class StageController : MonoBehaviour
     float timeStamp = 0;
     float subTimeStamp = 0;
     public GameObject startButton;
+    public GameObject nextScreenButton;
 
     public float offsetVerticalFromBoxToPlaceChoices = 1.2f;
 
@@ -32,7 +33,9 @@ public class StageController : MonoBehaviour
     {
         animator = this.GetComponent<GameAnimator>();
         animator.EnableAllClickables(false);
-        Screen.SetResolution(600, 800, false);
+        ResetGame();
+        //nextScreenButton.SetActive(false);
+        //Screen.SetResolution(600, 800, false);
     }
 
     // Update is called once per frame
@@ -40,7 +43,7 @@ public class StageController : MonoBehaviour
     {
         if(isRunning)
         {
-            switch(matchStage)
+            switch (matchStage)
             {
                 case MatchStages.Begin:
                     {
@@ -54,7 +57,7 @@ public class StageController : MonoBehaviour
                     break;
                 case MatchStages.FlashingMode:
                     {
-                        if(Time.time - timeStamp > 1)
+                        if (Time.time - timeStamp > 1)
                         {
                             matchStage = MatchStages.Hidden;
                             timeStamp = subTimeStamp = Time.time;
@@ -62,17 +65,17 @@ public class StageController : MonoBehaviour
                             // should be a transition state
                             animator.EnableAllClickables();
                         }
-                        else 
+                        else
                         {
                             int subTime = (int)((Time.time - subTimeStamp) * 10.0f);
-                            bool isOn = (subTime % 2 != 0) ? true:false;
+                            bool isOn = (subTime % 2 != 0) ? true : false;
                             ShowTheChoicesAboveTheBoxes(isOn);
                         }
                     }
                     break;
                 case MatchStages.Hidden:
                     {
-                        if(animator.GetChoices().Count == 3)
+                        if (animator.GetChoicesMade().Count == 3)
                         {
                             timeStamp = Time.time;
                             matchStage = MatchStages.FinishAndCompare;
@@ -82,13 +85,15 @@ public class StageController : MonoBehaviour
                     break;
                 case MatchStages.FinishAndCompare:
                     {
-                        if (Time.time - timeStamp > animator.timeToWaitForFruitAnim/2)
+                        if (Time.time - timeStamp > animator.timeToWaitForFruitAnim / 2)
                         {
                             //ga.EnableAllClickables(false);
                             if (DoChoicesMatch() == true)
                             {
                                 animator.PlaySuccessAnimation();
                                 matchStage = MatchStages.NavigateToNextScene;
+                                timeStamp = subTimeStamp = Time.time;
+                                
                             }
                             else
                             {
@@ -100,6 +105,14 @@ public class StageController : MonoBehaviour
                         }
                     }
                     break;
+                case MatchStages.NavigateToNextScene:
+                    {
+                        if(Time.time - timeStamp > animator.timeToWaitForFruitAnim)
+                        {
+                            nextScreenButton.SetActive(true);
+                        }
+                    }
+                    break;
             }
             //timeStamp
         }
@@ -107,7 +120,7 @@ public class StageController : MonoBehaviour
 
     bool DoChoicesMatch()
     {
-        var choices = animator.GetChoices();
+        var choices = animator.GetChoicesMade();
         var matchCases = matchOptions;
         if (matchOptions.Length != choices.Count)
             return false;
@@ -137,6 +150,7 @@ public class StageController : MonoBehaviour
         animator.ClearPreviousSelections();
         timeStamp = Time.time;
         matchStage = MatchStages.Begin;
+        isRunning = false;
         /*  choiceInstances = new GameObject[destinations.Length];
           matchOptions = new int[destinations.Length];*/
 
@@ -160,6 +174,17 @@ public class StageController : MonoBehaviour
         }
     }
 
+    public void ResetGame()
+    {
+        nextScreenButton.SetActive(false);
+        animator.EnableAllClickables(false);
+        animator.ResetRewardBox();
+        
+        nextScreenButton.SetActive(false);
+        startButton.SetActive(true);
+        CleanupAndReset();
+    }
+
     public void BeginPressed()
     {
         if (isRunning == true)
@@ -170,6 +195,8 @@ public class StageController : MonoBehaviour
             //startButton.GetComponent<GameObject>().SetActive(false);
             startButton.SetActive(false);
         }
+
+        //animator.ResetRewardBox();
 
         isRunning = true;
         ChooseRandomObjectsForPlacement();

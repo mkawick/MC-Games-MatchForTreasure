@@ -271,13 +271,29 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.9580369
       objectReference: {fileID: 0}
+    - target: {fileID: 1000013824976576, guid: cf8c19b412f3d3a47814f36bc49e0477, type: 3}
+      propertyPath: m_TagString
+      value: PresentBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000014085603780, guid: cf8c19b412f3d3a47814f36bc49e0477, type: 3}
+      propertyPath: m_TagString
+      value: PresentCap
+      objectReference: {fileID: 0}
     - target: {fileID: 1000011116579472, guid: cf8c19b412f3d3a47814f36bc49e0477, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1000011116579472, guid: cf8c19b412f3d3a47814f36bc49e0477, type: 3}
+      propertyPath: m_TagString
+      value: PresentWrappedBand
+      objectReference: {fileID: 0}
     - target: {fileID: 1000013891743152, guid: cf8c19b412f3d3a47814f36bc49e0477, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000013891743152, guid: cf8c19b412f3d3a47814f36bc49e0477, type: 3}
+      propertyPath: m_TagString
+      value: PresentUnwrappedBand
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf8c19b412f3d3a47814f36bc49e0477, type: 3}
@@ -396,6 +412,36 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &1326181383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1326181384}
+  m_Layer: 0
+  m_Name: ParticleEffectSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1326181384
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326181383}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.334, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2077773381 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000010238139128, guid: cf8c19b412f3d3a47814f36bc49e0477,
@@ -499,5 +545,30 @@ PrefabInstance:
       propertyPath: enableKeypressForTest
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2961578583621319242, guid: 58df8669fea76af48b7857c56b4e9bb5,
+        type: 3}
+      propertyPath: boxPrefab
+      value: 
+      objectReference: {fileID: 313426299}
+    - target: {fileID: 2961578583621319242, guid: 58df8669fea76af48b7857c56b4e9bb5,
+        type: 3}
+      propertyPath: lidPrefab
+      value: 
+      objectReference: {fileID: 313426298}
+    - target: {fileID: 2961578583621319242, guid: 58df8669fea76af48b7857c56b4e9bb5,
+        type: 3}
+      propertyPath: wrappedRibbonPrefab
+      value: 
+      objectReference: {fileID: 313426297}
+    - target: {fileID: 2961578583621319242, guid: 58df8669fea76af48b7857c56b4e9bb5,
+        type: 3}
+      propertyPath: unwrappedRibbonPrefab
+      value: 
+      objectReference: {fileID: 313426296}
+    - target: {fileID: 2961578583621319242, guid: 58df8669fea76af48b7857c56b4e9bb5,
+        type: 3}
+      propertyPath: particleEffectSpot
+      value: 
+      objectReference: {fileID: 1326181384}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58df8669fea76af48b7857c56b4e9bb5, type: 3}

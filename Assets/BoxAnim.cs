@@ -53,14 +53,18 @@ public class BoxAnim : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        parentPrefabInstance.SetActive(false);
+        ResetBox();
+    }
+
+    public void ResetBox()
+    {
         CopyAllPrefabs();
 
-        if (parentPrefabInstance != null)
-            parentPrefabInstance.SetActive(false);
-
+        if (parentInstance != null)
+            parentInstance.SetActive(true);
         if (unwrappedRibbon != null)
             unwrappedRibbon.SetActive(false);
-
         if (wrappedRibbon != null)
             wrappedRibbon.SetActive(true);
         if (lid != null)
@@ -80,36 +84,43 @@ public class BoxAnim : MonoBehaviour
         lid = GetChildObject(parentInstance.transform, "PresentCap");
         wrappedRibbon = GetChildObject(parentInstance.transform, "PresentWrappedBand");
         unwrappedRibbon = GetChildObject(parentInstance.transform, "PresentUnwrappedBand");
-
-        /* parentInstance.GetComponentInChildren
-
-         box = Instantiate(boxPrefab);s
-         lid = Instantiate(lidPrefab);
-         wrappedRibbon = Instantiate(wrappedRibbonPrefab);
-         unwrappedRibbon = Instantiate(unwrappedRibbonPrefab);*/
-
     }
-    public GameObject GetChildObject(Transform parent, string _tag)
+    public void Begin()
     {
-        for (int i = 0; i < parent.childCount; i++)
-        {
-            Transform child = parent.GetChild(i);
-            if (child.tag == _tag)
-            {
-                return child.gameObject;
-            }
-            if (child.childCount > 0)
-            {
-                return GetChildObject(child, _tag);
-            }
-        }
-        return null;
+        timeStamp = Time.time;
+        animStage = Stages.PauseBeforeUnwrap;
+
+        if (parentInstance != null)
+            parentInstance.SetActive(true);
+        if (wrappedRibbon != null)
+            wrappedRibbon.SetActive(true);
+        if (lid != null)
+            lid.SetActive(true);
+        if (box != null)
+            box.SetActive(true);
+        if (unwrappedRibbon != null)
+            unwrappedRibbon.SetActive(false);
     }
 
-    private void Reset()
+    public void Reset()
     {
         if (animatedToyReward != null)
             Destroy(animatedToyReward);
+
+        if (parentInstance != null)
+            Destroy(parentInstance);
+        lid = null;
+        box = null;
+        wrappedRibbon = null;
+        unwrappedRibbon = null;
+        ResetBox();
+        animStage = Stages.Waiting;
+        /* if (wrappedRibbon != null)
+             Destroy(wrappedRibbon);
+         if (lid != null)
+             Destroy(lid);
+         if (box != null)
+             Destroy(box);*/
     }
 
     // Update is called once per frame
@@ -119,15 +130,24 @@ public class BoxAnim : MonoBehaviour
         {
             Begin();
         }
+        if (enableKeypressForTest == true && Input.GetKeyDown(KeyCode.Space) == true)
+        {
+            Reset();
+        }
         if (animStage == Stages.Waiting)
         {
             HandleShakingAnim();
             return;
         }
-        switch(animStage)
+        TransitionTheState();
+    }
+
+    void TransitionTheState()
+    {
+        switch (animStage)
         {
             case Stages.PauseBeforeUnwrap:
-                if(Time.time - timeStamp > pauseTimeBeforeUnwrap)
+                if (Time.time - timeStamp > pauseTimeBeforeUnwrap)
                 {
                     timeStamp = Time.time;
                     animStage = Stages.Unwrapping;
@@ -157,7 +177,7 @@ public class BoxAnim : MonoBehaviour
                     destination.y += 2;
                     var rot = lid.transform.rotation;
                     var rot2 = rot.eulerAngles;
-                    rot2.x -=35;
+                    rot2.x -= 35;
                     //ßrot.eulerAngles
                     //rot.x += 4;
 
@@ -191,7 +211,7 @@ public class BoxAnim : MonoBehaviour
                 break;
             case Stages.ShowAndAnimateToy:
                 {
-                    if(toyRewards!= null)
+                    if (toyRewards != null && toyRewards.Length != 0)
                     {
                         GameObject archetype;
                         int which;
@@ -214,7 +234,7 @@ public class BoxAnim : MonoBehaviour
                 break;
             case Stages.Finished:
                 break;
-            
+
         }
     }
 
@@ -249,27 +269,20 @@ public class BoxAnim : MonoBehaviour
         }
     }
 
-    /* private void Reset()
-     {
-
-     }*/
-
-    public void Begin()
+    public GameObject GetChildObject(Transform parent, string _tag)
     {
-        timeStamp = Time.time;
-        animStage = Stages.PauseBeforeUnwrap;
-
-        if (parentInstance != null)
-            parentInstance.SetActive(true);
-        if (wrappedRibbon != null)
-            wrappedRibbon.SetActive(true);
-        if (lid != null)
-            lid.SetActive(true);
-        if (box != null)
-            box.SetActive(true);
-
-        if (unwrappedRibbon != null)
-            unwrappedRibbon.SetActive(false);
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+            if (child.tag == _tag)
+            {
+                return child.gameObject;
+            }
+            if (child.childCount > 0)
+            {
+                return GetChildObject(child, _tag);
+            }
+        }
+        return null;
     }
-
 }

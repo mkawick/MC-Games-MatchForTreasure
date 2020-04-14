@@ -387,7 +387,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1117615301}
-        m_MethodName: BeginPressed
+        m_MethodName: ResetGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1591,6 +1591,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startButton: {fileID: 1800820265}
+  nextScreenButton: {fileID: 76703824}
   offsetVerticalFromBoxToPlaceChoices: -1
 --- !u!4 &1117615302
 Transform:

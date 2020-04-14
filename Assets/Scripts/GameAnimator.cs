@@ -24,6 +24,8 @@ public class GameAnimator : MonoBehaviour
     public float hoverPositionsAboveBoxes = 0.6f;
 
     int currentDestinationIndex = 0;
+    public float timeToWaitForFruitAnim { get { return 3.0f; } }
+
     void Start()
     {
         int index = 0;
@@ -57,51 +59,11 @@ public class GameAnimator : MonoBehaviour
             choicesMade = new List<GameObject>();
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public List<int> GetChoices()
-    {
-        return clickedIndices;
-    }
-
-    public void PlaySuccessAnimation()
-    {
-        if(successAnimPrefab != null)
-        {
-            /* Vector3 position = Vector3.zero;
-             //position.x = 20;
-             Quaternion rot = Quaternion.identity;
-             GameObject go = Instantiate(successAnimPrefab, position, rot);
-             Destroy(go, 2.5f);*/
-            presentAnimation.GetComponent<BoxAnim>().particleEffectSpot = particleEffectSpot.transform;
-            presentAnimation.SetActive(true);
-            presentAnimation.GetComponent<BoxAnim>().Begin();
-        }
-    }
-
-    public void PlayFailureAnimation()
-    {
-        if (successAnimPrefab != null)
-        {
-            Vector3 position = particleEffectSpot.transform.position;// Vector3.zero;
-            //position.x = 80;
-            Quaternion rot = Quaternion.identity;
-            GameObject go = Instantiate(failureAnimPrefab, position, rot);
-            Destroy(go, 2.5f);
-        }
-    }
-
-    public float timeToWaitForFruitAnim { get { return 3.0f; } }
     public void ChoiceMade(GameObject go)
     {
         if (currentDestinationIndex >= boxes.Length)
         {
             return;
-            currentDestinationIndex = 0;
         }
         int which = currentDestinationIndex++;
 
@@ -116,18 +78,33 @@ public class GameAnimator : MonoBehaviour
             iTween.MoveTo(newObj, destination, timeToWaitForFruitAnim);
             choicesMade.Add(newObj);
             clickedIndices.Add(go.GetComponent<ClickableChoice>().choiceIndex);
-            /*    iTween tween;// = new iTween();
-                tween.easeType = iTween.EaseType.easeInCubic;*/
         }
+    }
+
+    public void ResetRewardBox()
+    {
+        presentAnimation.GetComponent<BoxAnim>().Reset();
+    }
+
+    public List<int> GetChoicesMade()
+    {
+        return clickedIndices;
     }
 
     public void ClearPreviousSelections()
     {
-        foreach (var go in choicesMade)
+        if (choicesMade != null)
         {
-            Destroy(go, 0.5f);
+            foreach (var go in choicesMade)
+            {
+                Destroy(go, 0.5f);
+            }
+            choicesMade.Clear();
         }
-        clickedIndices.Clear();
+        if (clickedIndices != null)
+        {
+            clickedIndices.Clear();
+        }
         currentDestinationIndex = 0;
     }
 
@@ -154,4 +131,31 @@ public class GameAnimator : MonoBehaviour
             clickableObjects[index++] = (go);
         }
     }
+    public void PlaySuccessAnimation()
+    {
+        if (successAnimPrefab != null)
+        {
+            /* Vector3 position = Vector3.zero;
+             //position.x = 20;
+             Quaternion rot = Quaternion.identity;
+             GameObject go = Instantiate(successAnimPrefab, position, rot);
+             Destroy(go, 2.5f);*/
+            presentAnimation.GetComponent<BoxAnim>().particleEffectSpot = particleEffectSpot.transform;
+            presentAnimation.SetActive(true);
+            presentAnimation.GetComponent<BoxAnim>().Begin();
+        }
+    }
+
+    public void PlayFailureAnimation()
+    {
+        if (successAnimPrefab != null)
+        {
+            Vector3 position = particleEffectSpot.transform.position;// Vector3.zero;
+            //position.x = 80;
+            Quaternion rot = Quaternion.identity;
+            GameObject go = Instantiate(failureAnimPrefab, position, rot);
+            Destroy(go, 2.5f);
+        }
+    }
+
 }
