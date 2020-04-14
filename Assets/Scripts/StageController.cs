@@ -99,6 +99,8 @@ public class StageController : MonoBehaviour
                             {
                                 animator.PlayFailureAnimation();
                                 CleanupAndReset();
+                                //animator.EnableAllClickables();
+                                isRunning = true;
                                 matchStage = MatchStages.Begin;
                                 timeStamp = subTimeStamp = Time.time;
                             }
@@ -134,6 +136,10 @@ public class StageController : MonoBehaviour
         return true;
     }
 
+    void CleanupForRetry()
+    {
+
+    }
     void CleanupAndReset()
     {
       /*  for(int i=0; i< choiceInstances.Length; i++)
@@ -195,8 +201,6 @@ public class StageController : MonoBehaviour
             //startButton.GetComponent<GameObject>().SetActive(false);
             startButton.SetActive(false);
         }
-
-        //animator.ResetRewardBox();
 
         isRunning = true;
         ChooseRandomObjectsForPlacement();
